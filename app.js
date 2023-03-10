@@ -4,7 +4,7 @@ const morgan = require("morgan")
 
 // Variables & App
 const app = express()
-const port = 3001
+const PORT = 3001
 
 app.use(cors())
 //MIDDLEWARE, para recibir bodies de formato json
@@ -21,7 +21,7 @@ app.get('/*', (req, res) => {
 // morgan se borra en fase de produccion
 app.use(morgan("dev"))
 
-//conexion
-app.listen(port, ()=>{
-    console.log(`Server corriendo en el puerto ${port}`)
+//conexion 
+app.listen(PORT, ()=>{
+    console.log(`Server corriendo en el puerto ${PORT}`)
 })

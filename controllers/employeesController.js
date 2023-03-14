@@ -22,8 +22,9 @@ const getAllEmployees = async (req, res) => {
 };
 
 const getEmployeById = async (req, res) => {
-    const resultado = await employeModel.findById( )
-        res.json({data : resultado});
+    const {employee_id}=req.params;
+    const resultado = await employeModel.getById(employee_id)
+    res.status(200).json({data: resultado});
 //   try {
 //     const empleados = await req.body;
 //     res.status(201).json({ data: empleados });
@@ -44,8 +45,7 @@ const createEmploye = async (req, res) => {
 
 const updateEmployee = async (req, res) => {
     const values =  {...req.body}
-    const employee_id = req.params.id
-    console.log(employee_id)
+    const {employee_id}=req.params;
     const result = await employeModel.updateEmployee(employee_id, values)
     res.status(200).json({ message: 'the employee was succesfully updated!', result });
 };

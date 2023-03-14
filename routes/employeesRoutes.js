@@ -11,10 +11,10 @@ router.get("/:employee_id", getEmployeById)
 router.post('/create', createEmploye)
 
 //ruta para eliminar un empleado
-router.delete('/:employee_id', deleteEmployee)
+router.delete('/delete/:employee_id', deleteEmployee)
 
 // ruta para actualizar un empleado
-router.put('/update/:id', updateEmployee)
+router.put('/update/:employee_id', updateEmployee)
 
 // ruta para obtener todos los empleados
     // router.get('/', employeesontroller.getAllEmployees)

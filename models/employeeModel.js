@@ -6,9 +6,12 @@ const findEmployees = async ()=>{
     return row
 } 
 
-const findById = async (employee_id)=>{
-    const row = await  conexion.query("SELECT * FROM  employee e WHERE e.employee_id = ? ", [employee_id]).spread(row=>row)
+const getById = async (employee_id)=>{
+    const sqlQuery=`SELECT * FROM  employees e WHERE e.employee_id = ${employee_id} `
+    const row = await  conexion.query(sqlQuery).spread((row)=>row)
     return row.length>0 ? row[0] : []
+
+
 }
 
 // conexion.query es un metodo js que recibe dos parametros, 1p- consulta a la db, 2p-arreglo con los valores que deseo insertar una consulta a la base de datos
@@ -37,7 +40,7 @@ const updateEmployee = async (employee_id, values)=>{
 
 module.exports = {
     findEmployees : findEmployees,
-    findById : findById,
+    getById : getById,
     createEmployee : createEmployee,
     deleteEmployee: deleteEmployee,
     updateEmployee:updateEmployee

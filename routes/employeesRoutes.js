@@ -1,10 +1,10 @@
 //import de dependencias y variables
 const router = require('express').Router();
 // import de controllers;
-const {findEmployees, deleteEmployee, updateEmployee , getEmployeById, createEmploye}=require('../controllers/employeesController');
+const {getAllEmployees, deleteEmployee, updateEmployee , getEmployeById, createEmploye}=require('../controllers/employeesController');
 
 // trae todos los empleados
-router.get("/", findEmployees)
+router.get("/", getAllEmployees)
 // trae empleado segun id
 router.get("/:employee_id", getEmployeById)
 // creacion de empleado

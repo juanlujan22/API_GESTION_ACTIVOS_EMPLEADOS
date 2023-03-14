@@ -1,7 +1,7 @@
 // import de archivo config
 const conexion = require('../config/dbConfig') 
 
-const findEmployees = async ()=>{ 
+const getAllEmployees = async ()=>{ 
     const row = await conexion.query('SELECT * FROM employees e').spread((row)=>row)
     return row
 } 
@@ -39,7 +39,7 @@ const updateEmployee = async (employee_id, values)=>{
 }
 
 module.exports = {
-    findEmployees : findEmployees,
+    getAllEmployees : getAllEmployees,
     getById : getById,
     createEmployee : createEmployee,
     deleteEmployee: deleteEmployee,

@@ -1,27 +1,35 @@
-const express = require("express")
-const cors = require("cors")
-const morgan = require("morgan") 
+// dependencias
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+// import de routes
+const assetsRouter = require("./routes/assetsRoutes");
+const employeesRouter = require("./routes/employeesRoutes");
+const dotEnv=require("dotenv")
 
 // Variables & App
-const app = express()
-const PORT = 3001
+const app = express();
+const PORT = process.env.DB_PORT || 3001;
 
-app.use(cors())
-//MIDDLEWARE, para recibir bodies de formato json
-app.use(express.json({limit : "50mb"}))
+//middleware global, pra resolver error cors
+app.use(cors());
+//middleware global, para recibir bodies de formato json
+app.use(express.json({ limit: '50mb' }));
+// middleware global, para ver logs de consultas en la terminal. Borrar en fase de produccion
+app.use(morgan("dev"));
 
-// endpoint
-app.set('title', 'Hi, The requested page is not available');
+//end point inicial, con el router
+app.use("/api/v1/assets", assetsRouter); //http://localhost:3001/api/v1
+app.use("/api/v1/employees", employeesRouter); //http://localhost:3001/api/v1
 
-app.get('/*', (req, res) => {
-    res.send(app.get('title'));
-    console.log(app.get('title'));
-})
+// endpoint de error cuando se ingresa a una ruta que no existe
+app.set("title", "Hi, The requested page is not available");
+app.get("/*", (req, res) => {
+  res.send(app.get("title"));
+  console.log(app.get("title"));
+});
 
-// morgan se borra en fase de produccion
-app.use(morgan("dev"))
-
-//conexion 
-app.listen(PORT, ()=>{
-    console.log(`Server corriendo en el puerto ${PORT}`)
-})
+//conexion
+app.listen(PORT, () => {
+  console.log(`Server corriendo en el puerto ${PORT}`);
+});

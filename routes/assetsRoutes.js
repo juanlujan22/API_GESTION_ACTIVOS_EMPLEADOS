@@ -1,22 +1,21 @@
 //dependencias
-const express = require('express');
-const router = express.Router();
+const assetRouter = require('express').Router();
 // import de controllers
-const assetsController = require('../controllers/assetsController')
+const {getAllAssets, getAssetsByEmployeeId, getAssetById, createAsset, updateAsset, deleteAsset} = require('../controllers/assetsController')
 
 
 // ruta para obtener todos los activos
-router.get('/', assetsController.getAllAssets)
-// ruta para obtener un solo activos
-router.get('/:employeeid', assetsController.getAssetsByEmployeeId)
-// ruta para obtener un solo activos
-router.get('/:assetid', assetsController.getAssetById)
+assetRouter.get('/', getAllAssets)
+// ruta para obtener activo segun id de empleado
+assetRouter.get('/empid/:employee_id', getAssetsByEmployeeId)
+// ruta para obtener un solo activos segun id de asset
+assetRouter.get('/:asset_id', getAssetById)
 // ruta para crear un nuevo activos
-router.post('/create', assetsController.createAsset)
+assetRouter.post('/create', createAsset)
 // ruta para actualizar un activos
-router.put('/:assetid', assetsController.updateAsset)
+assetRouter.put('/update/:asset_id', updateAsset)
 // ruta para eliminar un activos
-router.delete('/:assetid', assetsController.deleteAsset)
+assetRouter.delete('/delete/:asset_id', deleteAsset)
 
 //export 
-module.exports = router;
+module.exports = assetRouter;

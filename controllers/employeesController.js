@@ -1,29 +1,36 @@
 //import de modulo constructor de errores, para su manejo
 const HttpError = require("../models/httpError");
 
-// falta import de validacion con express-validatos
-
-// import de Model de empleado
+// import de Model de employees
 const employeModel = require("../models/employeeModel");
+const { json } = require("express");
 
-// implementar paginado en get all employees y en get all assets
+// trae todos employees, con paginado de a 5 resultados o según valor ingresado en query
+
 const getAllEmployees = async (req, res) => {
   try {
-    const resultado = await employeModel.getAllEmployees();
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 5;
+    const offset = (page - 1) * limit
+    const resultado = await employeModel.getAllEmployeesModel(limit, offset);
     res.json({ data: resultado });
   } catch (error) {
     const CustomError = new HttpError(
-      "Fetching employees failed, please try again.",
+      "Fetching employees failed",
       500
     );
     res.json({ errorMessage: CustomError.message, CustomError });
   }
 };
 
+//trae un solo employee mediante id
 const getEmployeById = async (req, res) => {
   try {
     const { employee_id } = req.params;
-    const resultado = await employeModel.getById(employee_id);
+    const resultado = await employeModel.getEmployeeByIdModel(employee_id);
+    // si id de empleado no existe, da error
+    if(resultado.length===0){return res.json({message: "employee id does not exist"})}   
+
     res.status(200).json({ data: resultado });
   } catch (error) {
     const CustomError = new HttpError(
@@ -34,29 +41,35 @@ const getEmployeById = async (req, res) => {
   }
 };
 
+// creacion de un nuevo employee
 const createEmploye = async (req, res) => {
   try {
     const values = { ...req.body }
-    const result = await employeModel.createEmployee(values);
-    res.status(201).json({ data: result });
+    const result = await employeModel.createEmployeeModel(values);
+    res.status(201).json({ message:"employee created successfully",data: result });
   } catch (error) {
     console.log(error)
-    const CustomError = new HttpError('Creating employee failed, please complete the inputs correctly.', 400);
+    const CustomError = new HttpError(`Creating employee failed. ${error}`, 500);
     res.json({errorMessage : CustomError.message, CustomError});
 }
 };
-
+//validar los inputs para que no queden vacios y que no permita modificar employee_id
 const updateEmployee = async (req, res) => {
   try {
-    const values = { ...req.body };
+    //verifico que el id exista. si existe devuelve empleado a modificar, si no devuelve error
     const { employee_id } = req.params;
-    const result = await employeModel.updateEmployee(employee_id, values);
+    const emplExist = await employeModel.getEmployeeByIdModel(employee_id)
+    console.log(emplExist)
+    // if(userExist===0){return res.json({message: "employee not found"})}
+    //si existe, envio al model, datos viejos y datos nuevos a editar
+    const values = { ...req.body };
+    const resultado = await employeModel.updateEmployeeModel(emplExist, values);
     res
       .status(200)
-      .json({ message: "the employee was succesfully updated!", result });
+      .json({ message: `the employee whit id ${employee_id}, was succesfully updated!`, resultado });
   } catch (error) {
     const CustomError = new HttpError(
-      "Update employee failed, please try again.",
+      `Update employee failed. ${error}`,
       500
     );
     res.json({ errorMessage: CustomError.message, CustomError });
@@ -66,11 +79,14 @@ const updateEmployee = async (req, res) => {
 const deleteEmployee = async (req, res) => {
   try {
     const { employee_id } = req.params;
-    await employeModel.deleteEmployee(employee_id);
+    // const idExiste = await employeModel.getEmployeeByIdModel(employee_id);
+    
+    //  if(idExiste){return res.json({message: "employee not exist"})}
+    await employeModel.deleteEmployeeModel(employee_id);
     res.status(200).json({ message: `the employee id: ${employee_id}, was deleted succesfully!` });
   } catch (error) {
     const CustomError = new HttpError(
-      "Delete employee failed, please try again.",
+      "Delete employee failed.",
       401
     );
     res.json({ errorMessage: CustomError.message, CustomError });

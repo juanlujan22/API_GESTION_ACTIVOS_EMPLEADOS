@@ -22,12 +22,12 @@ app.use(morgan("dev"));
 app.use("/api/v1/assets", assetsRouter); //http://localhost:3001/api/v1
 app.use("/api/v1/employees", employeesRouter); //http://localhost:3001/api/v1
 
-//endpoint de error cuando se ingresa a una ruta que no existe
-// app.set("title", "Ups, The requested page is not available, Error 404");
-// app.get("/*", (req, res) => {
-//   res.send(app.get("title"));
-//   console.log(app.get("title"));
-// });
+// endpoint de error cuando se ingresa a una ruta que no existe
+app.set("title", "Ups, The requested page is not available, Error 404");
+app.get("/*", (req, res) => {
+  res.send(app.get("title"));
+  console.log(app.get("title"));
+});
 
 //conexion
 app.listen(PORT, () => {

@@ -12,18 +12,6 @@ const {
 // validator 
 const {validateCreateEmployee}=require("../validators/employeesValidator")
 
-// router.post('/login', 
-//   body('email').isEmail(),
-//   body('password').isLength({ min: 6 }),
-//   validator,
-//   (req, res) => {
-//     // Si llega aquí, la validación fue exitosa
-//     res.json({ message: '¡creacion exitoso!' });
-//   }
-// );
-
-// module.exports = router
-
 // trae todos los empleados
 router.get("/", getAllEmployees);
 // trae empleado segun id

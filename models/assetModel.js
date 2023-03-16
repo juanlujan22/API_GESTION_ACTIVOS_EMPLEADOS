@@ -9,14 +9,11 @@ purchase_date
 */
 //getAllAssetsModel, getAssetsByEmployeeId, getAssetByIdModel, createAssetModel, updateAssetModel, deleteAssetModel
 
-/*
-QUERY=INSERT INTO `assets` (`id`, `name`, `type`, `code`, `marca`, `description`, `purchase_date`, `employee_id`) VALUES ('25', 'cosa', 'cosa', '321', 'cosa', 'una cosa', '2023-03-13', '13')
-*/ 
 const conexion = require("../config/dbConfig");
 
-const getAllAssetsModel = async ()=>{
+const getAllAssetsModel = async (limit, offset)=>{
     const row = await conexion
-    .query("SELECT * FROM assets a")
+    .query(`SELECT * FROM assets a LIMIT ${limit} OFFSET ${offset}`)
     .spread((row) => row);
   return row;
 }
@@ -42,10 +39,18 @@ const createAssetModel = async (values)=>{
      return result;
 }
 
-const updateAssetModel = async (asset_id, values)=>{
+const updateAssetModel = async (assetExist, values)=>{
+    const {asset_id}=assetExist
     const { name, type, code, marca, description, purchase_date, employee_id } = values;
     const sqlQuery = `UPDATE assets SET name=?, type=?, code=?, marca=?, description=?, purchase_date=?, employee_id=? WHERE asset_id = ${asset_id}`;
-    const result = await conexion.query(sqlQuery, [name, type, code, marca, description, purchase_date, employee_id]).spread((result) => result);
+    const result = await conexion.query(sqlQuery, [
+        name? name:assetExist.name, 
+        type?type:assetExist.type, 
+        code?code:assetExist.code, 
+        marca?marca:assetExist.marca, 
+        description?description:assetExist.description, 
+        purchase_date?purchase_date:assetExist.purchase_date, 
+        employee_id?employee_id:values.employee_id]).spread((result) => result);
     return result;
 }
 

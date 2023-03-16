@@ -1,66 +1,85 @@
 //import de modulo constructor de errores, para su manejo
 const HttpError = require("../models/httpError");
 
-// falta import de modules
-// falta import de validacion con express-validatos
+// import del model de assets
 const assetModel=require("../models/assetModel")
 
-const getAllAssets = async (req, res) => {
+// trae todos los assets, con paginado de a 5 resultados o según valor ingresado en query
+const getAllAssets = async (req, res) => { 
     try {
-        const resultado = await assetModel.getAllAssetsModel();
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 5;
+        const offset = (page - 1) * limit
+        const resultado = await assetModel.getAllAssetsModel(limit, offset);
         res.json({ data: resultado });
       } catch (error) {
         const CustomError = new HttpError(
-          "Fetching employees failed, please try again.",
+          `Fetching assets failed. Error: ${error}`,
+          500
+        );
+        res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
+      }
+};
+
+//trae assets de un empleado, mediante employe_id 
+const getAssetsByEmployeeId = async (req, res) => {
+  try {
+    const {employee_id}=req.params;
+    const  result = await assetModel.getAssetsByEmployeeId(employee_id);
+      // si id de asset no existe, da error
+    if(result.length===0){return res.json({message: "employee id does not exist"})}
+    res.json({data:  result});
+  } catch (error) {
+    const CustomError = new HttpError(
+      `Fetching assets failed. Error: ${error}`,
+      500
+    );
+    res.json({ errorMessage: CustomError.message, CustomError });
+  }
+};
+
+//trae un solo asset mediante asset_id
+const getAssetById = async (req, res) => {
+      try {
+      const  {asset_id}  = req.params;
+      const resultado = await assetModel.getAssetByIdModel(asset_id);
+      if(resultado.length===0){return res.json({message: "asset not exist"})}   
+      
+      res.status(200).json({ data: resultado });
+      } catch (error) {
+        const CustomError = new HttpError(
+          `Fetching assets failed. Error: ${error}`,
           500
         );
         res.json({ errorMessage: CustomError.message, CustomError });
       }
 };
 
-const getAssetsByEmployeeId = async (req, res) => {
-  const employee_id=req.params.employee_id;
-  const  result = await assetModel.getAssetsByEmployeeId(employee_id);
-  res.json({data:  result});
-};
-
-
-// no anda, se queda colgado
-const getAssetById = async (req, res) => {
-  const  asset_id  = req.params.asset_id;
-  const resultado = await assetModel.getAssetByIdModel(asset_id);
-  res.status(200).json({ data: resultado });
-    // try {
-    //   } catch (error) {
-    //     const CustomError = new HttpError(
-    //       "Fetching employee failed, please try again.",
-    //       500
-    //     );
-    //     res.json({ errorMessage: CustomError.message, CustomError });
-    //   }
-};
-
+// creacion de un nuevo asset
 const createAsset = async (req, res) => {
     try {
         const values = { ...req.body };
         const result = await assetModel.createAssetModel(values);
         res.status(201).json({ data: result });
       } catch (error) {
-        console.log(error)
-        const CustomError = new HttpError(`Creating Asset failed, ERROR ${error}`, 400);
+        const CustomError = new HttpError(
+          `Creating assets failed, ERROR ${error}`, 
+          500);
         res.json({errorMessage : CustomError.message, CustomError});
     }
 };
 
 const updateAsset = async (req, res) => {
     try {
-        const values = { ...req.body };
         const { asset_id } = req.params;
-        const result = await assetModel.updateAssetModel(asset_id, values);
-        res.status(200).json({ message: "the employee was succesfully updated!", result });
+        const assetExist = await assetModel.getAssetByIdModel(asset_id);
+        console.log(assetExist)
+        const values = { ...req.body };
+        const result = await assetModel.updateAssetModel(assetExist, values);
+        res.status(200).json({ message: `the asset with id ${asset_id}, was succesfully updated!`, result });
       } catch (error) {
         const CustomError = new HttpError(
-          `Update employee failed, please try again. Error: ${error}`,
+          `Update assets failed. ${error}`,
           500
         );
         res.json({ errorMessage: CustomError.message, CustomError });
@@ -74,8 +93,8 @@ const deleteAsset = async (req, res) => {
         res.status(200).json({ message: `the asset id: ${asset_id}, was deleted succesfully!` });
       } catch (error) {
         const CustomError = new HttpError(
-          `Delete employee failed. ${error}`,
-          401
+          `Delete assets failed. Error: ${error}`,
+          500
         );
         res.json({ errorMessage: CustomError.message, CustomError });
       }

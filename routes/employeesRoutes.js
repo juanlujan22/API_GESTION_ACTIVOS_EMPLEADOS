@@ -19,10 +19,10 @@ router.get("/:employee_id", getEmployeById);
 // creacion de empleado
 router.post("/create", validateCreateEmployee, createEmploye);
 
-//ruta para eliminar un empleado
+//ruta para eliminar un empleado segun id
 router.delete("/delete/:employee_id", deleteEmployee);
 
-// ruta para actualizar un empleado
+// ruta para editar un empleado
 router.put("/update/:employee_id", updateEmployee);
 
 //export

@@ -7,8 +7,7 @@ const assetsRouter = require("./routes/assetsRoutes");
 const employeesRouter = require("./routes/employeesRoutes");
 require("dotenv").config();
 
-//HACER README
-//VERIFICAR EL ASSET BY EMPLOYE ID
+//COLOCAR BIEN LOS CODIGOS DE ERROR
 
 // Variables & App
 const app = express();

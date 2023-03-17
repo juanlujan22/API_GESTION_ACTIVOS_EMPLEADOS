@@ -8,9 +8,6 @@ require("dotenv").config();
 const assetsRouter = require("./routes/assetsRoutes");
 const employeesRouter = require("./routes/employeesRoutes");
 
-
-//COLOCAR BIEN LOS CODIGOS DE ERROR
-
 // Variables & App
 const app = express();
 const PORT = process.env.DB_PORT || 3001;

@@ -1,8 +1,8 @@
 // dependencia para conectar mysql con la db
 const conexion = require("mysql2-promise")();
-const dotEnv = require("dotenv");
 
-dotEnv.config();
+//dependencia para acceder a las variables a través del objeto process y manejar las variables de entorno .env 
+require("dotenv").config();
 
 //conexion con la db
 const config = {

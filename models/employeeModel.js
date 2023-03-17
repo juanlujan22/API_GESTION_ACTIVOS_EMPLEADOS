@@ -1,4 +1,4 @@
-// import de archivo config
+// import de conexion a la DB
 const conexion = require("../config/dbConfig");
 
 const getAllEmployeesModel = async (limit, offset) => {
@@ -14,8 +14,6 @@ const getEmployeeByIdModel = async (employee_id) => {
   return row.length > 0 ? row[0] : [];
 };
 
-// conexion.query es un metodo js que recibe dos parametros, 1p- consulta a la db, 2p-arreglo con los valores que deseo insertar una consulta a la base de datos
-// .spread funcion callback de mysql2-promise
 const createEmployeeModel = async (values) => {
   const { first_name, last_name, cuit, team_id, join_date, rol } = values;
   const result = await conexion
@@ -48,17 +46,18 @@ const deleteEmployeeModel = async (employee_id) => {
 
 // reemplazo con los nuevos parametros recibidos, el array viejo de empleado. Permanecen los datos no editados
 const updateEmployeeModel = async (emplExist, values) => {
-  const {employee_id}= emplExist
+  const { employee_id } = emplExist;
   const { first_name, last_name, cuit, team_id, join_date, rol } = values;
   const sqlQuery = `UPDATE employees SET first_name=?, last_name=?, cuit=?, team_id=?, join_date=?, rol=? WHERE employee_id = ${employee_id}`;
   const result = await conexion
     .query(sqlQuery, [
-      first_name?first_name:emplExist.first_name, 
-      last_name?last_name:emplExist.last_name, 
-      cuit? cuit:emplExist.cuit, 
-      team_id? team_id:emplExist.team_id, 
-      join_date? join_date:emplExist.join_date, 
-      rol? rol:emplExist.rol])
+      first_name ? first_name : emplExist.first_name,
+      last_name ? last_name : emplExist.last_name,
+      cuit ? cuit : emplExist.cuit,
+      team_id ? team_id : emplExist.team_id,
+      join_date ? join_date : emplExist.join_date,
+      rol ? rol : emplExist.rol,
+    ])
     .spread((result) => result);
   return result;
 };

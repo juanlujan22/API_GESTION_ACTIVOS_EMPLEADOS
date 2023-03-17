@@ -2,10 +2,12 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+//dependencia para acceder a las variables a través del objeto process y manejar las variables de entorno .env 
+require("dotenv").config();
 // import de routes
 const assetsRouter = require("./routes/assetsRoutes");
 const employeesRouter = require("./routes/employeesRoutes");
-require("dotenv").config();
+
 
 //COLOCAR BIEN LOS CODIGOS DE ERROR
 
@@ -28,7 +30,6 @@ app.use("/api/v1/employees", employeesRouter); //http://localhost:3001/api/v1
 app.set("title", "Ups, The requested page is not available, Error 404");
 app.get("/*", (req, res) => {
   res.send(app.get("title"));
-  
 });
 
 //conexion

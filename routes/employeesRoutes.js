@@ -9,8 +9,8 @@ const {
   createEmploye,
 } = require("../controllers/employeesController");
 
-// validator 
-const {validateCreateEmployee}=require("../validators/employeesValidator")
+// validator
+const { validateCreateEmployee } = require("../validators/employeesValidator");
 
 // trae todos los empleados
 router.get("/", getAllEmployees);

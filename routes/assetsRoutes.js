@@ -1,6 +1,6 @@
-//dependencias
+//import de dependencias
 const assetRouter = require("express").Router();
-// import de controllers
+// controllers
 const {
   getAllAssets,
   getAssetsByEmployeeId,
@@ -9,7 +9,7 @@ const {
   updateAsset,
   deleteAsset,
 } = require("../controllers/assetsController");
-// validator
+//  validator
 const { validateCreateAsset } = require("../validators/assetsValidators");
 
 // ruta para obtener todos los activos

@@ -1,4 +1,4 @@
-// import de check, para validación de campos de la solicitud HTTP Post
+// import de check, para validación de campos de solicitudes HTTP Post
 const { check } = require("express-validator");
 // import de validateResult, para manejar los resultados de la validación
 const { validateResult } = require("../middleware/validator");

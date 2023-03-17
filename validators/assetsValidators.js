@@ -1,4 +1,4 @@
-//imports
+//imports de check y validateResutlt, para validación de campos de solicitudes HTTP Post y manejo de errores
 const { check } = require("express-validator");
 const { validateResult } = require("../middleware/validator");
 // validacion de parametros del create

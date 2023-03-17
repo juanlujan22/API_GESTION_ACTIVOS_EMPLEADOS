@@ -9,7 +9,7 @@ const {
   createEmploye,
 } = require("../controllers/employeesController");
 
-// validator
+// import de validator
 const { validateCreateEmployee } = require("../validators/employeesValidator");
 
 // trae todos los empleados

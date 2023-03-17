@@ -28,7 +28,7 @@ const getEmployeById = async (req, res) => {
     const resultado = await employeModel.getEmployeeByIdModel(employee_id);
     // si id de empleado no existe, da error
     if (resultado.length === 0) {
-      return res.json({ message: "employee id does not exist" });
+      return res.status(404).json({ message: "employee id does not exist" });
     }
 
     res.status(200).json({ data: resultado });
@@ -72,7 +72,7 @@ const updateEmployee = async (req, res) => {
     const emplExist = await employeModel.getEmployeeByIdModel(employee_id);
     console.log(emplExist);
     if (emplExist == 0) {
-      return res.json({ message: "that employee does not exist" });
+      return res.status(404).json({ message: "that employee does not exist" });
     }
     //si existe, envio al model, datos viejos y datos nuevos a editar
     const values = { ...req.body };

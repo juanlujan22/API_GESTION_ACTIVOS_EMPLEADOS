@@ -16,7 +16,7 @@ const validateCreateAsset = [
     .exists()
     .notEmpty()
     .isNumeric()
-    .withMessage("code is only a number, cannot be empty"),
+    .withMessage("code is only a number, cannot be empty"), 
   check("marca")
     .exists()
     .notEmpty()

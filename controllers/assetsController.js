@@ -3,6 +3,7 @@ const HttpError = require("../models/httpError");
 
 // import del model de assets
 const assetModel=require("../models/assetModel")
+const employeeModel = require("../models/employeeModel")
 
 // trae todos los assets, con paginado de a 5 resultados o según valor ingresado en query
 const getAllAssets = async (req, res) => { 
@@ -27,14 +28,14 @@ const getAssetsByEmployeeId = async (req, res) => {
     const {employee_id}=req.params;
     const  result = await assetModel.getAssetsByEmployeeId(employee_id);
       // si id de asset no existe, da error
-    if(result.length===0){return res.json({message: "employee id does not exist"})}
+    if(result.length===0){return res.json({message: "that employee does not have any assets"})}
     res.json({data:  result});
   } catch (error) {
     const CustomError = new HttpError(
       `Fetching assets failed. Error: ${error}`,
       500
     );
-    res.json({ errorMessage: CustomError.message, CustomError });
+    res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
   }
 };
 
@@ -51,7 +52,7 @@ const getAssetById = async (req, res) => {
           `Fetching assets failed. Error: ${error}`,
           500
         );
-        res.json({ errorMessage: CustomError.message, CustomError });
+        res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
       }
 };
 
@@ -59,22 +60,30 @@ const getAssetById = async (req, res) => {
 const createAsset = async (req, res) => {
     try {
         const values = { ...req.body };
+        const emplExist = await employeeModel.getEmployeeByIdModel(values.employee_id)
+       //verifico si existe el employee id a editar, si no error
+        if (emplExist==0){return res.json({message: "that employee does not exist"})}
         const result = await assetModel.createAssetModel(values);
         res.status(201).json({ data: result });
       } catch (error) {
         const CustomError = new HttpError(
           `Creating assets failed, ERROR ${error}`, 
           500);
-        res.json({errorMessage : CustomError.message, CustomError});
+        res.json({errorMessage : CustomError.message, code: CustomError.errorCode});
     }
 };
-
+//que exista el id del asset, como el empleado
 const updateAsset = async (req, res) => {
     try {
+
         const { asset_id } = req.params;
         const assetExist = await assetModel.getAssetByIdModel(asset_id);
-        console.log(assetExist)
+       //verifico si existe el asset id a editar, si no error
+        if (assetExist==0) {return res.json({message: "that asset does not exist" })}
         const values = { ...req.body };
+        const emplExist = await employeeModel.getEmployeeByIdModel(values.employee_id)
+       //verifico si existe el employee id a editar, si no error
+        if (emplExist==0){return res.json({message: "that employee does not exist"})}
         const result = await assetModel.updateAssetModel(assetExist, values);
         res.status(200).json({ message: `the asset with id ${asset_id}, was succesfully updated!`, result });
       } catch (error) {
@@ -82,32 +91,33 @@ const updateAsset = async (req, res) => {
           `Update assets failed. ${error}`,
           500
         );
-        res.json({ errorMessage: CustomError.message, CustomError });
+        res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
       }
 };
 
 const deleteAsset = async (req, res) => {
     try {
         const { asset_id } = req.params;
+        const assetExist = await assetModel.getAssetByIdModel(asset_id);
+        if(assetExist==0){return res.json({message: "that asset does not exist"})}
         await assetModel.deleteAssetModel(asset_id);
         res.status(200).json({ message: `the asset id: ${asset_id}, was deleted succesfully!` });
       } catch (error) {
         const CustomError = new HttpError(
           `Delete assets failed. Error: ${error}`,
-          500
+          401
         );
-        res.json({ errorMessage: CustomError.message, CustomError });
+        res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
       }
 };
 
 
 module.exports= {
-    getAllAssets, getAssetsByEmployeeId, getAssetById, createAsset, updateAsset, deleteAsset
+    getAllAssets,
+    getAssetsByEmployeeId, 
+    getAssetById, 
+    createAsset, 
+    updateAsset, 
+    deleteAsset
 }
-// exports.getAllAssets = getAllAssets;
-// exports.getAssetsByEmployeeId = getAssetsByEmployeeId;
-// exports.getAssetById = getAssetById;
-// exports.createAsset = createAsset;
-// exports.createAsset = createAsset;
-// exports.updateAsset = updateAsset;
-// exports.deleteAsset = deleteAsset;
+

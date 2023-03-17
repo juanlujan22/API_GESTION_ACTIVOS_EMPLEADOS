@@ -11,4 +11,5 @@ const validateCreateAsset = [
   },
 ];
 
+
 module.exports= {validateCreateAsset}

@@ -19,7 +19,7 @@ const getAllEmployees = async (req, res) => {
       "Fetching employees failed",
       500
     );
-    res.json({ errorMessage: CustomError.message, CustomError });
+    res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
   }
 };
 
@@ -37,7 +37,7 @@ const getEmployeById = async (req, res) => {
       "Fetching employee failed, please try again.",
       500
     );
-    res.json({ errorMessage: CustomError.message, CustomError });
+    res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
   }
 };
 
@@ -50,17 +50,17 @@ const createEmploye = async (req, res) => {
   } catch (error) {
     console.log(error)
     const CustomError = new HttpError(`Creating employee failed. ${error}`, 500);
-    res.json({errorMessage : CustomError.message, CustomError});
+    res.json({errorMessage : CustomError.message, code: CustomError.errorCode});
 }
 };
-//validar los inputs para que no queden vacios y que no permita modificar employee_id
+
 const updateEmployee = async (req, res) => {
   try {
     //verifico que el id exista. si existe devuelve empleado a modificar, si no devuelve error
     const { employee_id } = req.params;
     const emplExist = await employeModel.getEmployeeByIdModel(employee_id)
     console.log(emplExist)
-    // if(userExist===0){return res.json({message: "employee not found"})}
+    if(emplExist==0){return res.json({message: "that employee does not exist"})}
     //si existe, envio al model, datos viejos y datos nuevos a editar
     const values = { ...req.body };
     const resultado = await employeModel.updateEmployeeModel(emplExist, values);
@@ -72,24 +72,23 @@ const updateEmployee = async (req, res) => {
       `Update employee failed. ${error}`,
       500
     );
-    res.json({ errorMessage: CustomError.message, CustomError });
+    res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
   }
 };
 
 const deleteEmployee = async (req, res) => {
   try {
     const { employee_id } = req.params;
-    // const idExiste = await employeModel.getEmployeeByIdModel(employee_id);
-    
-    //  if(idExiste){return res.json({message: "employee not exist"})}
+    const emplExist = await employeModel.getEmployeeByIdModel(employee_id);
+    if(emplExist==0){return res.json({message: "that employee does not exist"})}
     await employeModel.deleteEmployeeModel(employee_id);
     res.status(200).json({ message: `the employee id: ${employee_id}, was deleted succesfully!` });
   } catch (error) {
     const CustomError = new HttpError(
-      "Delete employee failed.",
+      `Delete employee failed.${error}`,
       401
     );
-    res.json({ errorMessage: CustomError.message, CustomError });
+    res.json({ errorMessage: CustomError.message, code: CustomError.errorCode });
   }
 };
 

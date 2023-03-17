@@ -5,7 +5,10 @@ const morgan = require("morgan");
 // import de routes
 const assetsRouter = require("./routes/assetsRoutes");
 const employeesRouter = require("./routes/employeesRoutes");
-const dotEnv = require("dotenv");
+require("dotenv").config();
+
+//HACER README
+//VERIFICAR EL ASSET BY EMPLOYE ID
 
 // Variables & App
 const app = express();
@@ -26,7 +29,7 @@ app.use("/api/v1/employees", employeesRouter); //http://localhost:3001/api/v1
 app.set("title", "Ups, The requested page is not available, Error 404");
 app.get("/*", (req, res) => {
   res.send(app.get("title"));
-  console.log(app.get("title"));
+  
 });
 
 //conexion

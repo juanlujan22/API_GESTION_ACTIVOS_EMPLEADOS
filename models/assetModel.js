@@ -1,13 +1,3 @@
-/* 
-Entidad asset contará con los siguientes campos
-name
-type
-code
-marca
-description
-purchase_date
-*/
-//getAllAssetsModel, getAssetsByEmployeeId, getAssetByIdModel, createAssetModel, updateAssetModel, deleteAssetModel
 
 const conexion = require("../config/dbConfig");
 
@@ -19,7 +9,6 @@ const getAllAssetsModel = async (limit, offset)=>{
 }
 
 const getAssetsByEmployeeId =  async (employee_id)=>{
-    // 
     const sqlQuery=`SELECT e.first_name, e.last_name, e.join_date, a.name, a.marca, a.type, a.purchase_date, a.code   FROM  assets a JOIN employees e ON a.employee_id = e.employee_id WHERE e.employee_id = ${employee_id} `;
     const row = await conexion.query(sqlQuery).spread((row)=>row)
     return row
@@ -50,7 +39,7 @@ const updateAssetModel = async (assetExist, values)=>{
         marca?marca:assetExist.marca, 
         description?description:assetExist.description, 
         purchase_date?purchase_date:assetExist.purchase_date, 
-        employee_id?employee_id:values.employee_id]).spread((result) => result);
+        employee_id?employee_id:assetExist.employee_id]).spread((result) => result);
     return result;
 }
 
@@ -59,11 +48,6 @@ const deleteAssetModel = async (asset_id)=>{
     const result = await conexion.query(sqlQuery).spread((result) => result);
     return result;
 }
-
-
-
-
-
 
 
 module.exports={

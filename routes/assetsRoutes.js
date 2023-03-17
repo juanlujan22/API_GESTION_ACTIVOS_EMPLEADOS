@@ -3,7 +3,7 @@ const assetRouter = require('express').Router();
 // import de controllers
 const {getAllAssets, getAssetsByEmployeeId, getAssetById, createAsset, updateAsset, deleteAsset} = require('../controllers/assetsController')
 // validator 
-const {validateCreateAsset}=require("../validators/assetsValidators")
+const {validateCreateAsset,}=require("../validators/assetsValidators")
 
 // ruta para obtener todos los activos
 assetRouter.get('/', getAllAssets)

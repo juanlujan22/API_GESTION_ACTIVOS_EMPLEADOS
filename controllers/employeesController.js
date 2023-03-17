@@ -53,7 +53,6 @@ const createEmploye = async (req, res) => {
       .status(201)
       .json({ message: "employee created successfully", data: result });
   } catch (error) {
-    console.log(error);
     const CustomError = new HttpError(
       `Creating employee failed. ${error}`,
       500
@@ -64,13 +63,12 @@ const createEmploye = async (req, res) => {
     });
   }
 };
-
+//edicion de empleado
 const updateEmployee = async (req, res) => {
   try {
     //verifico que el id exista. si existe devuelve empleado a modificar, si no devuelve error
     const { employee_id } = req.params;
     const emplExist = await employeModel.getEmployeeByIdModel(employee_id);
-    console.log(emplExist);
     if (emplExist == 0) {
       return res.status(404).json({ message: "that employee does not exist" });
     }

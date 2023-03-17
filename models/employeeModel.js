@@ -54,7 +54,6 @@ const createEmployeeModel = async (values) => {
 //Elimina de la lista empleados segun id que traigo como parametro
 const deleteEmployeeModel = async (employee_id) => {
   try {
-    // cuando hay que hacer 2 consultas o sentencias, en un metodo. hasta que nose completen los dos, me das el ok
     const result1 = await conexion
       .query(`DELETE FROM assets WHERE employee_id = ${employee_id}`)
       .spread((result) => result);
@@ -72,7 +71,7 @@ const deleteEmployeeModel = async (employee_id) => {
   }
 };
 
-// reemplazo con los nuevos parametros recibidos, el array viejo de empleado. Permanecen los datos no editados
+// Edicion del array viejo de empleado con los nuevos parametros recibidos. Permanecen los datos no editados
 const updateEmployeeModel = async (emplExist, values) => {
   try {
     const { employee_id } = emplExist;

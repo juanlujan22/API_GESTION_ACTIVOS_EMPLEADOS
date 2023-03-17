@@ -8,13 +8,20 @@ const validateCreateAsset = [
     .notEmpty()
     .isLength({ min: 3, max: 10 })
     .withMessage("name must have between 3 and 10 characters"),
-  check("type").exists().notEmpty().withMessage("type cannot be empty"),
+  check("type")
+  .exists()
+  .notEmpty()
+  .withMessage("type cannot be empty"),
   check("code")
     .exists()
     .notEmpty()
     .isNumeric()
     .withMessage("code is only a number, cannot be empty"),
-  check("marca").exists().notEmpty().withMessage("marca cannot be empty"),
+  check("marca")
+    .exists()
+    .notEmpty()
+    .isLength({ min: 3, max: 10 })
+    .withMessage("marca cannot be empty. Must have between 3 and 10 characters"),
   check("purchase_date")
     .exists()
     .notEmpty()

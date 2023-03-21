@@ -10,7 +10,7 @@ const {
 } = require("../controllers/employeesController");
 
 // import de validator
-const { validateCreateEmployee } = require("../validators/employeesValidator");
+const { validateCreateEmployee, validateUpdateEmployee } = require("../validators/employeesValidator");
 
 // trae todos los empleados
 router.get("/", getAllEmployees);
@@ -23,7 +23,7 @@ router.post("/create", validateCreateEmployee, createEmploye);
 router.delete("/delete/:employee_id", deleteEmployee);
 
 // ruta para editar un empleado
-router.put("/update/:employee_id", updateEmployee);
+router.put("/update/:employee_id", validateUpdateEmployee, updateEmployee);
 
 //export
 module.exports = router;

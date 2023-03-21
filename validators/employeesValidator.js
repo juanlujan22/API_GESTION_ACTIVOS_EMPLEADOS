@@ -34,30 +34,22 @@ const validateCreateEmployee = [
 const validateUpdateEmployee = [
   check("first_name")
     .optional()
-    .exists()
-    .notEmpty()
     .isLength({ min: 3, max: 13 })
     .withMessage("firs name must have between 3 and 13 characters"),
   check("last_name")
     .optional()
-    .exists()
-    .notEmpty()
     .isLength({ min: 3, max: 13 })
     .withMessage("last name must have between 3 and 13 characters"),
-  check("cuit").optional().exists().notEmpty().withMessage("cuit cannot be empty"),
+  check("cuit").optional(),
   check("team_id")
     .optional()
-    .exists()
-    .notEmpty()
     .isNumeric()
-    .withMessage("cuit cannot be empty. Is a numeric value only"),
+    .withMessage("Is a numeric value only"),
   check("join_date")
     .optional()
-    .exists()
-    .notEmpty()
     .isISO8601()
-    .withMessage("join date, cannot be empty. Format has to be YYYY-MM-DD"),
-  check("rol").exists().notEmpty().withMessage("rol cannot be empty"),
+    .withMessage(" Format has to be YYYY-MM-DD"),
+  check("rol").optional(),
   (req, res, next) => {
     validateResult(req, res, next);
   },

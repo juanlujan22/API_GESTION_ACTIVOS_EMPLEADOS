@@ -10,7 +10,7 @@ const {
   deleteAsset,
 } = require("../controllers/assetsController");
 //  validator
-const { validateCreateAsset } = require("../validators/assetsValidators");
+const { validateCreateAsset, validateUpdateAsset } = require("../validators/assetsValidators");
 
 // ruta para obtener todos los activos
 assetRouter.get("/", getAllAssets);
@@ -21,7 +21,7 @@ assetRouter.get("/:asset_id", getAssetById);
 // ruta para crear un nuevo activos
 assetRouter.post("/create", validateCreateAsset, createAsset);
 // ruta para actualizar un activos
-assetRouter.put("/update/:asset_id", updateAsset);
+assetRouter.put("/update/:asset_id", validateUpdateAsset, updateAsset);
 // ruta para eliminar un activos
 assetRouter.delete("/delete/:asset_id", deleteAsset);
 

@@ -10,7 +10,7 @@ const employeesRouter = require("./routes/employeesRoutes");
 
 // variables
 const app = express();
-const PORT = process.env.DB_PORT || 3001;
+const PORT = process.env.API_PORT || 3001;
 
 //middleware globales
 app.use(cors());

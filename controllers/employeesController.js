@@ -69,7 +69,7 @@ const updateEmployee = async (req, res) => {
     //verifico que el id exista. si existe devuelve empleado a modificar, si no devuelve error
     const { employee_id } = req.params;
     const emplExist = await employeModel.getEmployeeByIdModel(employee_id);
-    if (emplExist == 0) {
+    if (emplExist.length == 0) {
       return res.status(404).json({ message: "that employee does not exist" });
     }
     //si existe, envio al model, datos viejos y datos nuevos a editar
@@ -94,15 +94,23 @@ const deleteEmployee = async (req, res) => {
     const { employee_id } = req.params;
     const emplExist = await employeModel.getEmployeeByIdModel(employee_id);
     // si el id del empleado no existe, arroja error
-    if (emplExist == 0) {
-      return res.json({ message: "that employee does not exist" });
+    if (emplExist.length == 0) {
+      return res.status(404).json({ message: "that employee does not exist" });
     }
+    //se verifica si el employee_id tiene assets y modifica el employee_id a null
+    const existAsset = await assetModel.getAssetsByEmployeeId(employee_id);
+    console.log(existAsset);
+    // si tiene assets modifica el employee_id a null, con metodo de asset
+    if (existAsset.length >= 1) {
+      await assetModel.modifyAssetEmployeeId(employee_id);
+    }
+    // elimino el empleado
     await employeModel.deleteEmployeeModel(employee_id);
     res.status(200).json({
       message: `the employee id: ${employee_id}, was deleted succesfully!`,
     });
   } catch (error) {
-    const CustomError = new HttpError(`Delete employee failed.${error}`, 500);
+    const CustomError = new HttpError(`Delete employee failed.${error}`, 401);
     res.json({
       errorMessage: CustomError.message,
       code: CustomError.errorCode,
@@ -112,9 +120,9 @@ const deleteEmployee = async (req, res) => {
 
 // exports
 module.exports = {
-  getAllEmployees: getAllEmployees,
-  createEmploye: createEmploye,
-  getEmployeById: getEmployeById,
-  deleteEmployee: deleteEmployee,
-  updateEmployee: updateEmployee,
+  getAllEmployees,
+  createEmploye,
+  getEmployeById,
+  deleteEmployee,
+  updateEmployee,
 };

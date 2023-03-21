@@ -2,6 +2,7 @@
 const conexion = require("../config/dbConfig");
 const HttpError = require("../models/httpError");
 
+// obtiene toda la lista de assets
 const getAllAssetsModel = async (limit, offset) => {
   try {
     const row = await conexion
@@ -16,7 +17,7 @@ const getAllAssetsModel = async (limit, offset) => {
     });
   }
 };
-
+// obtiene los asset de un employee, segun su id
 const getAssetsByEmployeeId = async (employee_id) => {
   try {
     const sqlQuery = `SELECT e.first_name, e.last_name, e.join_date, a.name, a.marca, a.type, a.purchase_date, a.code   FROM  assets a JOIN employees e ON a.employee_id = e.employee_id WHERE e.employee_id = ${employee_id} `;
@@ -30,7 +31,7 @@ const getAssetsByEmployeeId = async (employee_id) => {
     });
   }
 };
-
+// obtiene asset segun id
 const getAssetByIdModel = async (asset_id) => {
   try {
     const sqlQuery = `SELECT * FROM assets WHERE asset_id = ${asset_id}`;
@@ -44,7 +45,7 @@ const getAssetByIdModel = async (asset_id) => {
     });
   }
 };
-
+// creacion de un nuevo asset
 const createAssetModel = async (values) => {
   try {
     const { name, type, code, marca, description, purchase_date, employee_id } =
@@ -64,7 +65,7 @@ const createAssetModel = async (values) => {
     });
   }
 };
-
+// edicion del asset
 const updateAssetModel = async (assetExist, values) => {
   try {
     const { asset_id } = assetExist;
@@ -91,7 +92,7 @@ const updateAssetModel = async (assetExist, values) => {
     });
   }
 };
-
+// elimina Asset
 const deleteAssetModel = async (asset_id) => {
   try {
     const sqlQuery = `DELETE FROM assets WHERE asset_id = ${asset_id}`;
@@ -105,6 +106,12 @@ const deleteAssetModel = async (asset_id) => {
     });
   }
 };
+// modifica a null, el FK de employee_id 
+const modifyAssetEmployeeId = async (employee_id) => {
+  const sqlQuery = `UPDATE assets SET employee_id=null WHERE employee_id = ${employee_id}`
+  const result = await conexion.query(sqlQuery).spread((result) => result);
+  return result
+}
 
 module.exports = {
   getAllAssetsModel,
@@ -113,4 +120,5 @@ module.exports = {
   createAssetModel,
   updateAssetModel,
   deleteAssetModel,
+  modifyAssetEmployeeId
 };

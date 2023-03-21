@@ -51,23 +51,24 @@ const createEmployeeModel = async (values) => {
   }
 };
 
-//Elimina de la lista empleados segun id que traigo como parametro
+//Elimina de la lista empleados segun id que traigo como parametro.
+// antes tengo que modificar los employee_id a null, de los assets que tiene el employee_id a borrar.
+/*
+  const result1 = await conexion
+      .query(`UPDATE assets SET employee_id = NULL WHERE employee_id IN (SELECT employee_id FROM employees WHERE employee_id = ${employee_id}) `)
+      .spread((result) => result);
+*/
 const deleteEmployeeModel = async (employee_id) => {
   try {
-    const result1 = await conexion
-      .query(`DELETE FROM assets WHERE employee_id = ${employee_id}`)
-      .spread((result) => result);
-    const result2 = await conexion
+
+    const result = await conexion
       .query(`DELETE FROM employees WHERE employee_id = ${employee_id}`)
       .spread((result) => result);
 
-    return result1, result2;
+    return result;
   } catch (error) {
-    const CustomError = new HttpError("Error", 500);
-    res.json({
-      errorMessage: CustomError.message,
-      code: CustomError.errorCode,
-    });
+
+    console.error("Error al eliminar los registros:", error);
   }
 };
 

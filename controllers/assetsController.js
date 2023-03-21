@@ -83,7 +83,7 @@ const createAsset = async (req, res) => {
       values.employee_id
     );
     //si no existe el employee id a editar, devuelve error
-    if (emplExist == 0) {
+    if (emplExist.length == 0) {
       return res.status(404).json({ message: "that employee does not exist" });
     }
 
@@ -106,7 +106,7 @@ const updateAsset = async (req, res) => {
     const { asset_id } = req.params;
     const assetExist = await assetModel.getAssetByIdModel(asset_id);
     //verifico si existe el asset id a editar, si no error
-    if (assetExist == 0) {
+    if (assetExist.length == 0) {
       return res.status(404).json({ message: "that asset does not exist" });
     }
 
@@ -115,7 +115,7 @@ const updateAsset = async (req, res) => {
       values.employee_id
     );
     //verifico si existe el employee id a editar, si no error
-    if (emplExist == 0) {
+    if (emplExist.length == 0) {
       return res.status(404).json({ message: "that employee does not exist" });
     }
 
@@ -140,7 +140,7 @@ const deleteAsset = async (req, res) => {
     const { asset_id } = req.params;
     const assetExist = await assetModel.getAssetByIdModel(asset_id);
     // si asset no existe, devuelve error
-    if (assetExist == 0) {
+    if (assetExist.length == 0) {
       return res.status(404).json({ message: "that asset does not exist" });
     }
     await assetModel.deleteAssetModel(asset_id);

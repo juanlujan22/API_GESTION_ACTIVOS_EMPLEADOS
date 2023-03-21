@@ -102,7 +102,7 @@ const deleteEmployee = async (req, res) => {
       message: `the employee id: ${employee_id}, was deleted succesfully!`,
     });
   } catch (error) {
-    const CustomError = new HttpError(`Delete employee failed.${error}`, 401);
+    const CustomError = new HttpError(`Delete employee failed.${error}`, 500);
     res.json({
       errorMessage: CustomError.message,
       code: CustomError.errorCode,

@@ -19,7 +19,7 @@ const getAllEmployees = async (req, res) => {
     const [resultado, count] = await employeModel.getAllEmployeesModel(limit, offset, first_name, last_name, cuit);
     //dentro de la respuesta data, se envia resultado del getAllEmployeesModel y resultado de totalPages
     const totalPages = Math.ceil(count / limit);
-    res.json({ data: totalPages, resultado  });
+    res.json({ totalPages: totalPages, data: resultado  });
   } catch (error) {
     const CustomError = new HttpError("Fetching employees failed", 500);
     res.json({

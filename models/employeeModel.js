@@ -3,12 +3,30 @@ const conexion = require("../config/dbConfig");
 const HttpError = require("../models/httpError");
 
 //obtiene todos los empleados
-const getAllEmployeesModel = async (limit, offset) => {
+const getAllEmployeesModel = async (limit, offset, first_name, last_name, cuit) => {
   try {
-    const row = await conexion
-      .query(`SELECT*FROM employees e LIMIT ${limit} OFFSET ${offset}`)
-      .spread((row) => row);
-    return row;
+    let whereClause = '';
+    let params = [];
+    if (first_name) {
+      whereClause += 'first_name = ? AND ';
+      params.push(first_name);
+    }
+    if (last_name) {
+      whereClause += 'last_name = ? AND ';
+      params.push(last_name);
+    }
+    if (cuit) {
+      whereClause += 'cuit = ? AND ';
+      params.push(cuit);
+    }
+    if (whereClause.length > 0) {
+      whereClause = 'WHERE ' + whereClause.slice(0, -5);
+    }
+    const [row, count] = await Promise.all([
+      conexion.query(`SELECT * FROM employees e ${whereClause} LIMIT ${limit} OFFSET ${offset}`, params).spread((row) => row),
+      conexion.query(`SELECT COUNT(*) AS count FROM employees e ${whereClause}`, params).spread((row) => row[0].count),
+    ]);
+    return [row, count];
   } catch (error) {
     const CustomError = new HttpError("Error", 500);
     res.json({

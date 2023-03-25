@@ -35,8 +35,8 @@ const validateCreateAsset = [
 const validateUpdateAsset = [
   check("name")
     .optional()
-    .isLength({ min: 3, max: 10 })
-    .withMessage("name must have between 3 and 10 characters"),
+    .isLength({ min: 3, max: 20 })
+    .withMessage("name must have between 3 and 20 characters"),
   check("type")
   .optional(),
   check("code")

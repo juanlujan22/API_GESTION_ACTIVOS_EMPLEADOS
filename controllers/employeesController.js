@@ -3,15 +3,23 @@ const HttpError = require("../models/httpError");
 
 // import de Model de employees
 const employeModel = require("../models/employeeModel");
-
+const assetModel = require("../models/assetModel")
 // trae todos employees, con paginado de a 5 resultados o según valor ingresado en query
 const getAllEmployees = async (req, res) => {
   try {
+    //paginado
     const page = req.query.page || 1;
     const limit = req.query.limit || 5;
     const offset = (page - 1) * limit;
-    const resultado = await employeModel.getAllEmployeesModel(limit, offset);
-    res.json({ data: resultado });
+    //filtrado de first_name, last name y cuit
+    const first_name = req.query.first_name || '';
+    const last_name = req.query.last_name || '';
+    const cuit = req.query.cuit || '';
+    //mando 
+    const [resultado, count] = await employeModel.getAllEmployeesModel(limit, offset, first_name, last_name, cuit);
+    //dentro de la respuesta data, se envia resultado del getAllEmployeesModel y resultado de totalPages
+    const totalPages = Math.ceil(count / limit);
+    res.json({ data: totalPages, resultado  });
   } catch (error) {
     const CustomError = new HttpError("Fetching employees failed", 500);
     res.json({
@@ -48,6 +56,8 @@ const getEmployeById = async (req, res) => {
 const createEmploye = async (req, res) => {
   try {
     const values = { ...req.body };
+    //validar que el cuit no este repetido. crear un metodo que tome el cuit dentro de values y lo busque en la tabla employee
+    // const existCuit = await employeModel.FindCuit()
     const result = await employeModel.createEmployeeModel(values);
     res
       .status(201)

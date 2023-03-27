@@ -6,7 +6,7 @@ const validateCreateAsset = [
   check("name")
     .exists()
     .notEmpty()
-    .isLength({ min: 3, max: 10 })
+    .isLength({ min: 2, max: 20 })
     .withMessage("name must have between 3 and 10 characters"),
   check("type")
   .exists()
@@ -20,7 +20,7 @@ const validateCreateAsset = [
   check("marca")
     .exists()
     .notEmpty()
-    .isLength({ min: 3, max: 10 })
+    .isLength({ min: 2, max: 20 })
     .withMessage("marca cannot be empty. Must have between 3 and 10 characters"),
   check("purchase_date")
     .exists()
@@ -35,7 +35,7 @@ const validateCreateAsset = [
 const validateUpdateAsset = [
   check("name")
     .optional()
-    .isLength({ min: 3, max: 20 })
+    .isLength({ min: 2, max: 20 })
     .withMessage("name must have between 3 and 20 characters"),
   check("type")
   .optional(),
@@ -45,7 +45,7 @@ const validateUpdateAsset = [
     .withMessage("code is only a number"), 
   check("marca")
     .optional()
-    .isLength({ min: 3, max: 10 })
+    .isLength({ min: 2, max: 20 })
     .withMessage("Must have between 3 and 10 characters"),
   check("purchase_date")
     .optional()

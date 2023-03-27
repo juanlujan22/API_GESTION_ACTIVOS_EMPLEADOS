@@ -70,12 +70,6 @@ const createEmployeeModel = async (values) => {
 };
 
 //Elimina de la lista empleados segun id que traigo como parametro.
-// antes tengo que modificar los employee_id a null, de los assets que tiene el employee_id a borrar.
-/*
-  const result1 = await conexion
-      .query(`UPDATE assets SET employee_id = NULL WHERE employee_id IN (SELECT employee_id FROM employees WHERE employee_id = ${employee_id}) `)
-      .spread((result) => result);
-*/
 const deleteEmployeeModel = async (employee_id) => {
   try {
 

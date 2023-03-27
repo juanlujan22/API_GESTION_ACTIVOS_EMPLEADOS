@@ -56,8 +56,6 @@ const getEmployeById = async (req, res) => {
 const createEmploye = async (req, res) => {
   try {
     const values = { ...req.body };
-    //validar que el cuit no este repetido. crear un metodo que tome el cuit dentro de values y lo busque en la tabla employee
-    // const existCuit = await employeModel.FindCuit()
     const result = await employeModel.createEmployeeModel(values);
     res
       .status(201)

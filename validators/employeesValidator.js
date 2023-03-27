@@ -34,11 +34,11 @@ const validateCreateEmployee = [
 const validateUpdateEmployee = [
   check("first_name")
     .optional()
-    .isLength({ min: 3, max: 13 })
+    .isLength({ min: 2, max: 13 })
     .withMessage("firs name must have between 3 and 13 characters"),
   check("last_name")
     .optional()
-    .isLength({ min: 3, max: 13 })
+    .isLength({ min: 2, max: 13 })
     .withMessage("last name must have between 3 and 13 characters"),
   check("cuit").optional(),
   check("team_id")
